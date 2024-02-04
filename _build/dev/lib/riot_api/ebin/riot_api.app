@@ -1,0 +1,12 @@
+{application,riot_api,
+             [{optional_applications,[]},
+              {applications,[kernel,stdlib,elixir,logger,req,cachex]},
+              {description,"riot_api"},
+              {modules,['Elixir.RiotApi.Client','Elixir.RiotApi.Matches',
+                        'Elixir.RiotApi.Matches.Match',
+                        'Elixir.RiotApi.Matches.SummonerMatchStats',
+                        'Elixir.RiotApi.Summoners',
+                        'Elixir.RiotApi.Summoners.Summoner',
+                        'Elixir.RiotApi.Supervisor']},
+              {registered,[]},
+              {vsn,"0.1.0"}]}.
