@@ -2,37 +2,33 @@
 
 While this project is a phoenix project, we are not using the UI.
 
-# in this project we have a underlying library created for fetching data from the riot service and caching those results to help reduce the number of api calls made to their servers. (to save us some previous rate limits)
+-- in this project we have a underlying library created for fetching data from the riot service and caching those results to help reduce the number of api calls made to their servers. (to save us some previous rate limits)
 
-# that can be found in ./libraries/riot_api
-
-# We are also using caches here to avoid needing to store data in a database. it didn't seem necessary.
-
-# to launch and test please use:
+-- that can be found in ./libraries/riot_api
+-- We are also using caches here to avoid needing to store data in a database. it didn't seem necessary.
+-- to launch and test please use:
 
 RIOT_API_KEY=yourkey iex -S mix phx.server
 
-# using this command you are able to fetch a list of champions this summoner used in their past 5 games.
+-- using this command you are able to fetch a list of champions this summoner used in their past 5 games.
 
 Blitz.Summoners.fetch_summoner("na1", "soknorb")
 
-# by running that command, this player is added to our summoners Cache within the riot_api library.
-
-# when added, we track the timestamp of when the player was looked up using a fetched_at field.
-
-# for debugging, you can quick fetch cached summoners this way:
+-- by running that command, this player is added to our summoners Cache within the riot_api library.
+-- when added, we track the timestamp of when the player was looked up using a fetched_at field.
+-- for debugging, you can quick fetch cached summoners this way:
 
 Cachex.get(:summoners, "Soknorb")
 
-# players in the cache with a fetched_at time of < 1 hour from the current timestamp will have their metches and champion names pulled from Riot API every minute.
+-- players in the cache with a fetched_at time of < 1 hour from the current timestamp will have their metches and champion names pulled from Riot API every minute.
 
-# matches also get cached to avoid unnecessary api calls. matches are also shared between players so it made sense to keep those around.
+-- matches also get cached to avoid unnecessary api calls. matches are also shared between players so it made sense to keep those around.
 
-# by calling Blitz.Summoners.get_summoner("na1", "soknorb") again, it will cause the fetched_at timestap to reset, thus causing their metches to sync for an additional hour.
+-- by calling Blitz.Summoners.get_summoner("na1", "soknorb") again, it will cause the fetched_at timestap to reset, thus causing their metches to sync for an additional hour.
 
 # to see Logger.info("Summoner #{summoner.name} completed match #{latest_match_id}") you will have to play a game after running the fetch command. or.. you can change the cached summoner using the following sequence
 
-# check what summoners are in cache, assuming one exists
+-- check what summoners are in cache, assuming one exists
 
 {:ok, [summonerName1 | _tail]} = Cachex.keys(:summoners)
 
@@ -41,11 +37,11 @@ Cachex.get(:summoners, "Soknorb")
 summoner = %{summoner | match_ids: Enum.filter(summoner.match_ids, fn match_id -> match_id != latest_match_id end)}
 Cachex.put(:summoners, summoner.name, summoner)
 
-# confirm its updated
+-- confirm its updated
 
 Cachex.get(:summoners, summoner.name)
 
-# this will make their latest match seem like its new
+-- this will make their latest match seem like its new
 
 # challange instructions
 
